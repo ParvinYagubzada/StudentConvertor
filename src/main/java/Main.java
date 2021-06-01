@@ -58,9 +58,9 @@ public class Main {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }, 1000, TimeUnit.MILLISECONDS);
+                }, 1, TimeUnit.MILLISECONDS);
             }
-            Thread.sleep(2000);
+            Thread.sleep(2);
         }
     }
 
@@ -108,17 +108,6 @@ public class Main {
         localManager.getTransaction().begin();
         for (String line : lines) {
             Student student = mapper.readValue(line, Student.class);
-            for (Teacher teacher: student.getTeachers()) {
-                Teacher find = localManager.find(Teacher.class, teacher.getId());
-                if (find == null) {
-                    localManager.merge(teacher.getSubject());
-                    localManager.merge(teacher);
-                }
-
-            }
-            Grade find = localManager.find(Grade.class, student.getGrade().getId());
-            if (find == null)
-                localManager.merge(student.getGrade());
             localManager.merge(student);
         }
         localManager.getTransaction().commit();
